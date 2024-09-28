@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Aleo:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    background: url('../img/noaa-WHLI73X8tE0-unsplash.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Aleo', sans-serif;
+    background-color: #f0f0f0; 
+    overflow: hidden;
+    height: 100vh;
+}
+
+.container{
+    padding: 30px 70px;
+    color: #f0f0f0ff;
+}
+
+.info{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
