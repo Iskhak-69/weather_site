@@ -30,6 +30,7 @@ body{
 .info .values{
     background: rgba(46, 45, 45, 0.7);
     display: flex;
+    font-size: 25px;
     flex-direction: column;
     padding: 20px;
     border-radius: 15px;
