@@ -12,7 +12,8 @@ body{
     font-family: 'Aleo', sans-serif;
     background-color: #f0f0f0; 
     overflow: hidden;
-    height: 100vh;
+    height: 100%;
+    width: 100%;
 }
 
 .container{
@@ -73,18 +74,22 @@ body{
     font-weight: 700;
 }
 
-.forecast{
-    background: rgba(24,24,27,0.8);
-    padding: 25px;
+.forecast {
+    background: rgba(24, 24, 27, 0.8);
+    padding: 25px; 
     position: fixed;
     bottom: 0;
+    left: 0; 
+    right: 0; 
     display: flex;
-    color:white;
-    width: 100%;
+    color: white;
     align-items: center;
     justify-content: center;
     overflow-y: hidden;
+    width: 100vw;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.5); 
 }
+
 
 .forecast .today{
     display: flex;
