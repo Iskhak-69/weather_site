@@ -9,7 +9,7 @@ const otherForecastEl = document.getElementById('other-forecast');
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const API_KEY = 'babefcc0862e184f6f0106bfcfbc9608'; 
+const API_KEY = 'e10050cafcf945c3a0894443243009';
 
 setInterval(() => {
     const time = new Date();
@@ -29,35 +29,29 @@ setInterval(() => {
 }, 1000);
 
 getWeatherData();
+
 function getWeatherData() {
     navigator.geolocation.getCurrentPosition((success) => {
         let { latitude, longitude } = success.coords;
 
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            })
+        fetch(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${latitude},${longitude}&days=7`)
+            .then(res => res.json())
             .then(data => {
-                console.log("Weather data:", data);
+                console.log(data);
                 showWeatherData(data);
             })
             .catch(error => {
-                console.error("Fetch error:", error);
+                console.error('Error fetching weather data:', error);
             });
-    }, (error) => {
-        console.error("Geolocation error:", error);
     });
 }
 
-
 function showWeatherData(data) {
-    let { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
+    const { humidity, pressure_mb, wind_kph, cloud} = data.current;
+    const { sunrise, sunset } = data.forecast.forecastday[0].astro;
 
-    timezone.innerHTML = data.timezone;
-    countryEl.innerHTML = data.lat + 'N ' + data.lon + 'E';
+    timezone.innerHTML = data.location.tz_id;
+    countryEl.innerHTML = `${data.location.region}, ${data.location.country}`;
 
     currentWeatherItemsEl.innerHTML = `
         <div class="weather-item">
@@ -66,44 +60,44 @@ function showWeatherData(data) {
         </div>
         <div class="weather-item">
             <div>Pressure</div>
-            <div>${pressure} hPa</div>
+            <div>${pressure_mb} millibar</div>
         </div>
         <div class="weather-item">
             <div>Wind Speed</div>
-            <div>${wind_speed} m/s</div>
+            <div>${wind_kph} kph</div>
+        </div>
+        <div class="weather-item">
+            <div>Cloud Cover</div>
+            <div>${cloud}%</div>
         </div>
         <div class="weather-item">
             <div>Sunrise</div>
-            <div>${window.moment(sunrise * 1000).format('HH:mm a')}</div>
+            <div>${sunrise}</div>
         </div>
         <div class="weather-item">
             <div>Sunset</div>
-            <div>${window.moment(sunset * 1000).format('HH:mm a')}</div>
+            <div>${sunset}</div>
+        </div>
+    `;
+
+    currentTempEl.innerHTML = `
+        <img src="${data.current.condition.icon}" alt="weather icon" class="weather-icon">
+        <div class="other">
+            <div class="temp">Current - ${data.current.temp_c}&#176;C</div>
         </div>
     `;
 
     let otherDayForecast = '';
-    data.daily.forEach((day, idx) => {
-        if (idx === 0) {
-            currentTempEl.innerHTML = `
-                <img src="http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="weather icon" class="weather-icon">
-                <div class="other">
-                    <div class="day">${window.moment(day.dt * 1000).format('dddd')}</div>
-                    <div class="temp">Day - ${day.temp.day}&#176;C</div>
-                    <div class="temp">Night - ${day.temp.night}&#176;C</div>
-                </div>
-            `;
-        } else {
-            otherDayForecast += `
-                <div class="other-forecast-item">
-                    <div class="day">${window.moment(day.dt * 1000).format('ddd')}</div>
-                    <img src="http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="weather icon" class="weather-icon">
-                    <div class="temp">Day - ${day.temp.day}&#176;C</div>
-                    <div class="temp">Night - ${day.temp.night}&#176;C</div>
-                </div>
-            `;
-        }
+    data.forecast.forecastday.slice(0, 7).forEach((day) => {
+        otherDayForecast += `
+            <div class="other-forecast-item">
+                <div class="day">${window.moment(day.date).format('dddd')}</div>
+                <img src="${day.day.condition.icon}" alt="weather icon" class="weather-icon">
+                <div class="temp">Day - ${day.day.maxtemp_c}&#176;C</div>
+                <div class="temp">Night - ${day.day.mintemp_c}&#176;C</div>
+            </div>
+        `;
     });
 
-    otherForecastEl.innerHTML = otherDayForecast; 
+    otherForecastEl.innerHTML = otherDayForecast;  
 }
