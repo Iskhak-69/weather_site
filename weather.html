@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather View</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="city-search">
+        <input type="text" id="city-input" placeholder="Enter city name" />
+        <button id="search-btn">Search</button>
+    </div>
+    
+    <div class="container"> 
+        <div class="info">
+            <div class="date-container">
+                <div class="date" id="date"></div>
+                <div class="time" id="time"></div>
+                <div class="values" id="weather-items"></div>
+            </div>
+
+            <div class="country-zone">
+                <div class="time-zone" id="time-zone"></div>
+                <div class="country" id="country"></div>
+            </div>
+        </div>
+
+        <div class="forecast">
+            <div class="today" id="current-temp"></div>
+            <div class="other-forecast" id="other-forecast"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script src="js/weather.js"></script>
+</body>
+</html>
